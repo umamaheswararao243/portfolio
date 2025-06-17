@@ -744,7 +744,7 @@
           </div>
 
           <div class="col-lg-7">
-<!--             <form id="contact-form" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+           <form id="contact-form" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
               <div class="row gy-4">
 
                 <div class="col-md-6">
@@ -776,37 +776,9 @@
                 </div>
 
               </div>
-            </form> -->
+            </form> 
 
-             <form id="contact-form">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
-
-        <label for="message">Message:</label><br>
-        <textarea id="message" name="message" rows="4" required></textarea><br><br>
-        <button type="submit">Submit</button>
-    </form>
-
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
-    <script>
-        (function () {
-            emailjs.init("mwJOH6w4x9z-7a1yb");  // Replace with your EmailJS user ID
-        })();
-
-        document.getElementById("contact-form").addEventListener("submit", function (event) {
-            event.preventDefault();
-            emailjs.sendForm("service_4xgtaam", "template_nph4xdc", this)
-                .then(function (response) {
-                    console.log("Success:", response);
-                    alert("Your message has been sent!");
-                }, function (error) {
-                    console.log("Error:", error);
-                    alert("Something went wrong. Please try again.");
-                });
-        });
-    </script>
+            
           </div><!-- End Contact Form -->
 
         </div>
