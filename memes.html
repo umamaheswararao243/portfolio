@@ -11,6 +11,38 @@
   
   <!-- Image tag -->
   <img src="img/br.jpeg" alt="" class="img-fluid rounded-circle">
+
+
+  <form id="contact-form">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" required></textarea><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+    <script>
+        (function () {
+            emailjs.init("mwJOH6w4x9z-7a1yb");  // Replace with your EmailJS user ID
+        })();
+
+        document.getElementById("contact-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            emailjs.sendForm("service_4xgtaam", "template_nph4xdc", this)
+                .then(function (response) {
+                    console.log("Success:", response);
+                    alert("Your message has been sent!");
+                }, function (error) {
+                    console.log("Error:", error);
+                    alert("Something went wrong. Please try again.");
+                });
+        });
+    </script>
+
   
   
 </body>
