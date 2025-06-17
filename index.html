@@ -867,6 +867,19 @@
                     alert("Something went wrong. Please try again.");
                 });
         });
+
+
+    const form = document.getElementById('contact-form');
+
+  // Add an event listener for the form submission
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Perform your form submission logic here (e.g., AJAX request)
+
+    // Reset the form fields
+    form.reset();
+  });
     </script>
 
 </body>
