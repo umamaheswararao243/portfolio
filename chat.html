@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Person Chat</title>
+    <style>
+        /* Reset and general styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e5ddd5;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            background-color: #f0f0f0;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 0 0 15px 15px;
+        }
+
+        #user-input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        #send-btn {
+            width: 15%;
+            padding: 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #send-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 15px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 16px;
+        }
+
+        .user1-message {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+        }
+
+        .user2-message {
+            background-color: #e5e5ea;
+            align-self: flex-start;
+        }
+
+        /* Scroll to the bottom automatically */
+        .chat-box::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background-color: #bbb;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-box" id="chat-box">
+        <!-- The messages will appear here -->
+    </div>
+    <div class="input-container">
+        <input type="text" id="user-input" placeholder="Type a message..." />
+        <button id="send-btn">Send</button>
+    </div>
+</div>
+
+<script>
+    let isUser1Turn = true;  // To alternate between two users
+
+    // Function to send a message
+    function sendMessage() {
+        let userMessage = document.getElementById('user-input').value;
+
+        if (userMessage.trim() !== "") {
+            // Create the message element based on whose turn it is
+            const messageDiv = document.createElement('div');
+            if (isUser1Turn) {
+                messageDiv.classList.add('message', 'user1-message');
+                messageDiv.textContent = "User 1: " + userMessage;
+            } else {
+                messageDiv.classList.add('message', 'user2-message');
+                messageDiv.textContent = "User 2: " + userMessage;
+            }
+
+            // Add the message to the chat box
+            document.getElementById('chat-box').appendChild(messageDiv);
+
+            // Clear the input field
+            document.getElementById('user-input').value = "";
+
+            // Scroll to the bottom
+            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+
+            // Switch turn between User 1 and User 2
+            isUser1Turn = !isUser1Turn;
+        }
+    }
+
+    // Event listener for the send button
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+    // Allow pressing 'Enter' key to send a message
+    document.getElementById('user-input').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
