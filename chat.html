@@ -76,18 +76,26 @@
     }
 
     .message.received {
-      background-color: #ffffff;
       margin-right: auto;
       flex-direction: row;
     }
 
+    .message.received:nth-child(odd) {
+      background-color: lightgreen;
+    }
+
+    .message.received:nth-child(even) {
+      background-color: lightcoral;
+    }
+
     .message .message-text {
-      font-size: 14px;
+      padding-bottom: 18px;
+      font-size: 16px;
       margin: 0 10px;
     }
 
     .message .message-time {
-      font-size: 12px;
+      font-size: 9px;
       color: #888;
       position: absolute;
       bottom: 5px;
@@ -185,6 +193,7 @@
     onValue(messagesRef, (snapshot) => {
       chatBox.innerHTML = '';
       const messages = snapshot.val();
+      let receivedMessageCount = 0;
       for (const key in messages) {
         const message = messages[key];
         const messageElement = document.createElement('div');
@@ -201,6 +210,10 @@
         messageElement.appendChild(messageContent);
         messageElement.appendChild(messageTime);
         chatBox.appendChild(messageElement);
+
+        if (message.sender !== 'John Doe') {
+          receivedMessageCount++;
+        }
       }
       chatBox.scrollTop = chatBox.scrollHeight;
     });
