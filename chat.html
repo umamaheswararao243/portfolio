@@ -65,20 +65,25 @@
       padding: 10px;
       border-radius: 10px;
       position: relative;
+      display: flex;
+      align-items: center;
     }
 
     .message.sent {
       background-color: #dcf8c6;
       margin-left: auto;
+      flex-direction: row-reverse;
     }
 
     .message.received {
       background-color: #ffffff;
       margin-right: auto;
+      flex-direction: row;
     }
 
     .message .message-text {
       font-size: 14px;
+      margin: 0 10px;
     }
 
     .message .message-time {
@@ -123,7 +128,6 @@
     <div class="chat-header">
       <span class="username">SESETTY</span>
       <button class="settings-btn">😊</button>
-
     </div>
     <div class="chat-box" id="chat-box"></div>
     <div class="chat-footer">
@@ -181,6 +185,8 @@
     onValue(messagesRef, (snapshot) => {
       chatBox.innerHTML = '';
       const messages = snapshot.val();
+      let isUserMessage = true;
+
       for (const key in messages) {
         const message = messages[key];
         const messageElement = document.createElement('div');
@@ -197,7 +203,10 @@
         messageElement.appendChild(messageContent);
         messageElement.appendChild(messageTime);
         chatBox.appendChild(messageElement);
+
+        isUserMessage = !isUserMessage;
       }
+
       chatBox.scrollTop = chatBox.scrollHeight;
     });
   </script>
