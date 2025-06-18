@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsApp-like Chat</title>
+  <title>Real-Time Chat</title>
   <style>
     * {
       margin: 0;
@@ -136,41 +136,20 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCvPbNTIRpDm-7qKX4PMeYu-nbM_Qls_qo",
-      authDomain: "chatapplication-fd71c.firebaseapp.com",
-      databaseURL: "https://chatapplication-fd71c-default-rtdb.firebaseio.com/",
-      projectId: "chatapplication-fd71c",
-      storageBucket: "chatapplication-fd71c.appspot.com",
-      messagingSenderId: "1061792672389",
-      appId: "1:1061792672389:web:9db6be30932435575957ec",
-      measurementId: "G-N3J453V4RL"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-
+  <script>
     const chatBox = document.getElementById('chat-box');
     const messageInput = document.getElementById('message-input');
     const sendBtn = document.getElementById('send-btn');
 
-    const messagesRef = ref(database, 'messages/');
+    let messages = [];
+    let isUserMessage = true;
 
-    sendBtn.addEventListener('click', async () => {
+    sendBtn.addEventListener('click', () => {
       const messageText = messageInput.value.trim();
       if (messageText) {
-        const newMessageRef = push(messagesRef);
-        await set(newMessageRef, {
-          sender: 'John Doe',
-          text: messageText,
-          timestamp: new Date().toISOString()
-        });
-
+        messages.push({ sender: 'You', text: messageText, timestamp: new Date().toISOString() });
         messageInput.value = '';
+        renderMessages();
         chatBox.scrollTop = chatBox.scrollHeight;
       }
     });
@@ -182,15 +161,11 @@
       }
     });
 
-    onValue(messagesRef, (snapshot) => {
+    function renderMessages() {
       chatBox.innerHTML = '';
-      const messages = snapshot.val();
-      let isUserMessage = true;
-
-      for (const key in messages) {
-        const message = messages[key];
+      messages.forEach((message) => {
         const messageElement = document.createElement('div');
-        messageElement.classList.add('message', message.sender === 'John Doe' ? 'sent' : 'received');
+        messageElement.classList.add('message', message.sender === 'You' ? 'sent' : 'received');
 
         const messageContent = document.createElement('span');
         messageContent.classList.add('message-text');
@@ -203,12 +178,8 @@
         messageElement.appendChild(messageContent);
         messageElement.appendChild(messageTime);
         chatBox.appendChild(messageElement);
-
-        isUserMessage = !isUserMessage;
-      }
-
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
+      });
+    }
   </script>
 </body>
 </html>
