@@ -5,131 +5,148 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WhatsApp-like Chat</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
-    .chat-container {
-      width: 400px;
-      height: 600px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-    }
+  .chat-container {
+    width: 400px;
+    height: 600px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
 
-    .chat-header {
-      background-color: #075e54;
-      color: white;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
+  .chat-header {
+    background-color: #075e54;
+    color: white;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .chat-header .username {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
+  .chat-header .username {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
 
-    .chat-header .settings-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-    }
+  .chat-header .settings-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
 
-    .chat-box {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      background-color: #e5e5e5;
-    }
+  .delete-all-btn {
+    position: absolute;
+    top: 14px;
+    right: 10px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 17px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-    .message {
-      max-width: 70%;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
+  .delete-all-btn:hover {
+    background-color: #d32f2f;
+  }
 
-    .message.sent {
-      background-color: #dcf8c6;
-      margin-left: auto;
-      flex-direction: row-reverse;
-    }
+  .chat-box {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #e5e5e5;
+  }
 
-    .message.received {
-      margin-right: auto;
-      flex-direction: row;
-    }
+  .message {
+    max-width: 70%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
 
-    .message.received:nth-child(odd) {
-      background-color: lightgreen;
-    }
+  .message.sent {
+    background-color: #dcf8c6;
+    margin-left: auto;
+    flex-direction: row-reverse;
+  }
 
-    .message.received:nth-child(even) {
-      background-color: lightcoral;
-    }
+  .message.received {
+    background-color: #ffffff;
+    margin-right: auto;
+    flex-direction: row;
+  }
 
-    .message .message-text {
-      padding-bottom: 18px;
-      font-size: 16px;
-      margin: 0 10px;
-    }
+  .message.received:nth-child(even) {
+    background-color: #f8e5e5;
+  }
 
-    .message .message-time {
-      font-size: 9px;
-      color: #888;
-      position: absolute;
-      bottom: 5px;
-      right: 10px;
-    }
+  .message .message-text {
+    padding-bottom: 18px;
+    font-size: 16px;
+    margin: 0 10px;
+  }
 
-    .chat-footer {
-      display: flex;
-      padding: 10px;
-      background-color: #ffffff;
-      border-top: 1px solid #ddd;
-    }
+  .message .message-time {
+    font-size: 9px;
+    color: #888;
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+  }
 
-    .chat-footer input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      margin-right: 10px;
-    }
+  .chat-footer {
+    display: flex;
+    padding: 10px;
+    background-color: #ffffff;
+    border-top: 1px solid #ddd;
+  }
 
-    .chat-footer button {
-      background-color: #075e54;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
+  .chat-footer input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin-right: 10px;
+  }
 
-    .chat-footer button:disabled {
-      background-color: #ccc;
-    }
-  </style>
+  .chat-footer button {
+    background-color: #075e54;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .chat-footer button:disabled {
+    background-color: #ccc;
+  }
+</style>
+
 </head>
 <body>
   <div class="chat-container">
@@ -137,6 +154,7 @@
       <span class="username">SESETTY</span>
       <button class="settings-btn">😊</button>
     </div>
+    <button class="delete-all-btn" id="delete-all-btn">Delete Chat</button> <!-- Delete All Button -->
     <div class="chat-box" id="chat-box"></div>
     <div class="chat-footer">
       <input type="text" id="message-input" placeholder="Type a message..." />
@@ -146,7 +164,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+    import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCvPbNTIRpDm-7qKX4PMeYu-nbM_Qls_qo",
@@ -165,6 +183,7 @@
     const chatBox = document.getElementById('chat-box');
     const messageInput = document.getElementById('message-input');
     const sendBtn = document.getElementById('send-btn');
+    const deleteAllBtn = document.getElementById('delete-all-btn');
 
     const messagesRef = ref(database, 'messages/');
 
@@ -216,6 +235,18 @@
         }
       }
       chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    deleteAllBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete all messages?')) {
+        remove(messagesRef)
+          .then(() => {
+            alert('All messages have been deleted.');
+          })
+          .catch((error) => {
+            console.error('Error deleting messages:', error);
+          });
+      }
     });
   </script>
 </body>
