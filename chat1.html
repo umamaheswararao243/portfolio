@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial‑scale=1.0" />
+<title>Firebase Chat</title>
+<style>
+  /* Reset & base */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #ece5dd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+ 
+  /* Chat Container */
+  .chat-container {
+    width: 380px;
+    height: 50%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+  }
+ 
+  /* Header with Delete */
+  .chat-header {
+    background: #075e54;
+    color: #fff;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  .chat-header .username { font-size: 16px; font-weight: bold; }
+  .chat-header .delete-btn {
+    background: #000000;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    width: 112px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .chat-header .delete-btn:hover { background: #d32f2f; }
+ 
+  /* Messages */
+  .messages {
+    flex: 1; padding: 16px;
+    overflow-y: auto;
+    background: url('https://i.imgur.com/8BgxQeK.png') center/cover;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .message {
+    width: 50%;
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 18px;
+    position: relative;
+    word-wrap: break-word;
+  }
+  .message.user { background: #dcf8c6; align-self: flex-end; }
+  .message:not(.user) { background:#61c2b2; align-self: flex-start; }
+  .message-time {
+    font-size: 10px; color: #999;
+    display: block; margin-top: 4px; text-align: right;
+  }
+ 
+  /* Input */
+  .input-container {
+    display: flex; align-items: center;
+    padding: 12px; border-top: 1px solid #ddd;
+  }
+  .input-container input {
+    flex: 1; padding: 10px 14px;
+    border: none; border-radius: 20px;
+    background: #f1f1f1; font-size: 14px;
+  }
+  .input-container button {
+    margin-left: 8px;
+    padding: 0 16px;
+    background: #075e54; color: white;
+    border: none; border-radius: 50%;
+    cursor: pointer; height: 38px;
+  }
+  .input-container button:hover { background: #128c7e; }
+ 
+  /* Scrollbar */
+  .messages::-webkit-scrollbar { width: 6px; }
+  .messages::-webkit-scrollbar-thumb {
+    background: #888; border-radius: 3px;
+  }
+  .messages::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+</style>
+</head>
+<body>
+ 
+<div class="chat-container">
+  <div class="chat-header">
+    <span class="username">SESETTY</span>
+    <button class="delete-btn" id="deleteAllBtn">Delete chat</button>
+  </div>
+  <div class="messages" id="messages"></div>
+  <div class="input-container">
+    <input type="text" id="messageInput" placeholder="Type your message…" />
+    <button id="sendBtn">➤</button>
+  </div>
+</div>
+ 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+import {
+  getDatabase, ref, push,
+  onChildAdded, onChildRemoved, remove
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+ 
+const firebaseConfig = {
+  apiKey: "AIzaSyCvPbNTIRpDm-7qKX4PMeYu-nbM_Qls_qo",
+  authDomain: "chatapplication-fd71c.firebaseapp.com",
+  databaseURL: "https://chatapplication-fd71c-default-rtdb.firebaseio.com/",
+  projectId: "chatapplication-fd71c",
+  storageBucket: "chatapplication-fd71c.appspot.com",
+  messagingSenderId: "1061792672389",
+  appId: "1:1061792672389:web:9db6be30932435575957ec",
+  measurementId: "G-N3J453V4RL"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const messagesRef = ref(db, "messages");
+ 
+const messagesDiv = document.getElementById("messages");
+const input = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const deleteBtn = document.getElementById("deleteAllBtn");
+ 
+function displayMessage(data, key) {
+  const div = document.createElement("div");
+  div.className = `message ${data.user === "User" ? "user" : ""}`;
+  div.setAttribute("data-key", key);
+  div.innerHTML = `
+    <span>${data.text}</span>
+    <span class="message-time">${new Date(data.timestamp).toLocaleTimeString()}</span>
+  `;
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+ 
+// Listen for new messages
+onChildAdded(messagesRef, snapshot => {
+  displayMessage(snapshot.val(), snapshot.key);
+});
+ 
+// Listen for removed messages
+onChildRemoved(messagesRef, snapshot => {
+  const el = document.querySelector(`.message[data-key="${snapshot.key}"]`);
+  if (el) el.remove();
+});
+ 
+sendBtn.addEventListener("click", () => {
+  const text = input.value.trim();
+  if (!text) return;
+  push(messagesRef, {
+    user: "User",
+    text,
+    timestamp: Date.now()
+  });
+  input.value = "";
+});
+ 
+input.addEventListener("keypress", e => {
+  if (e.key === "Enter") sendBtn.click();
+});
+ 
+deleteBtn.addEventListener("click", () => {
+  if (confirm("Delete entire chat?")) remove(messagesRef);
+});
+</script>
+ 
+</body>
+</html>
