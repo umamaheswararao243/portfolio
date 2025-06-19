@@ -1,113 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial‑scale=1.0" />
-<title>Firebase Chat</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial‑scale=1.0" />
+  <title>Firebase Chat</title>
+  <style>
+    /* General body + container */
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #ededed;
+      display: flex;
+      justify-content: center;
+    }
+    .chat-container {
+      width: 40%;
+      max-width: 600px;
+      background-color: #ffffff;
+      border-radius: 0;
+      border: 1px solid #ccc;
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-    body { font-family: Arial, sans‑serif; padding: 20px; background: #f1f1f1; }
+    /* Header */
+    .chat-container h2 {
+      margin: 0;
+      padding: 15px;
+      background-color:#14532b;
+      color: white;
+      font-size: 1.25rem;
+      text-align: left;
+      border-bottom: 1px solid #128C7E;
+    }
 
-    .chat-container { width: 80%; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    /* Messages panel */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: #e5ddd5;
+      display: flex;
+      flex-direction: column;
+    }
+    .message {
+      margin: 6px 0;
+      padding: 8px 12px;
+      border-radius: 7.5px;
+      max-width: 70%;
+      position: relative;
+      line-height: 1.4;
+    }
+    .message.user {
+      background: #dcf8c6;
+      align-self: flex-end;
+    }
+    .message:not(.user) {
+      background: #ffffff;
+      align-self: flex-start;
+    }
+    .message.user::after,
+    .message:not(.user)::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 0;
+      height: 0;
+    }
+    .message.user::after {
+      right: -5px;
+      border-left: 5px solid #dcf8c6;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .message:not(.user)::after {
+      left: -5px;
+      border-right: 5px solid #ffffff;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .message strong {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
 
-    .messages { max-height: 400px; overflow-y: auto; margin-bottom: 20px; display: flex; flex-direction: column; }
-
-    .message { background: #eee; padding: 8px; margin: 5px; border-radius: 8px; max-width: 60%; }
-
-    .message.user { background: #aad8e6; align-self: flex-end; }
-
-    .input-container { display: flex; }
-
-    .input-container input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-
-    .input-container button { padding: 0 20px; margin-left: 10px; background: #3b82f6; color: #fff; border: none; border-radius: 5px; }
-</style>
+    /* Input area */
+    .input-container {
+      display: flex;
+      background: #f0f0f0;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+    }
+    .input-container input {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+    }
+    .input-container button {
+      background: #075e54;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      margin-left: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .messages::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.2);
+      border-radius: 3px;
+    }
+  </style>
 </head>
 <body>
-<div class="chat-container">
-<h2>Chat with Firebase</h2>
-<div class="messages" id="messages"></div>
-<div class="input-container">
-<input type="text" id="messageInput" placeholder="Type your message..." />
-<button id="sendBtn">Send</button>
-</div>
-</div>
- 
+  <div class="chat-container">
+    <h2>sesetty</h2>
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Type your message…" />
+      <button id="sendBtn">➤</button>
+    </div>
+  </div>
+
   <script type="module">
-
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-
     import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
- 
-    const firebaseConfig = {
 
+   const firebaseConfig = {
       apiKey: "AIzaSyCvPbNTIRpDm-7qKX4PMeYu-nbM_Qls_qo",
-
       authDomain: "chatapplication-fd71c.firebaseapp.com",
-
       databaseURL: "https://chatapplication-fd71c-default-rtdb.firebaseio.com/",
-
       projectId: "chatapplication-fd71c",
-
       storageBucket: "chatapplication-fd71c.appspot.com",
-
       messagingSenderId: "1061792672389",
-
       appId: "1:1061792672389:web:9db6be30932435575957ec",
-
       measurementId: "G-N3J453V4RL"
-
     };
- 
+
     const app = initializeApp(firebaseConfig);
-
     const db = getDatabase(app);
-
     const messagesDiv = document.getElementById("messages");
-
     const messageInput = document.getElementById("messageInput");
-
     const sendBtn = document.getElementById("sendBtn");
- 
+
     function displayMessage({ user, text }) {
-
       const div = document.createElement("div");
-
       div.className = `message ${user === "User" ? "user" : ""}`;
-
-      div.innerHTML = `<strong>${user}</strong>: ${text}`;
-
+      div.innerHTML = `${text}`;
       messagesDiv.appendChild(div);
-
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
     }
- 
+
     onChildAdded(ref(db, "messages"), snapshot => {
-
       displayMessage(snapshot.val());
-
     });
- 
+
     sendBtn.addEventListener("click", () => {
-
       const text = messageInput.value.trim();
-
       if (!text) return;
-
       push(ref(db, "messages"), { user: "User", text, timestamp: Date.now() });
-
       messageInput.value = "";
-
     });
- 
+
     messageInput.addEventListener("keypress", e => {
-
       if (e.key === "Enter") sendBtn.click();
-
     });
-</script>
+  </script>
 </body>
 </html>
-
- 
