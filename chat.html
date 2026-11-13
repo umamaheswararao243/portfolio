@@ -15,7 +15,7 @@
 
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      background: #e9edef;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -24,140 +24,163 @@
     }
 
     .chat-container {
-      width: 400px;
+      width: 420px;
       max-width: 100%;
-      height: 600px;
+      height: 650px;
       max-height: 95vh;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
-      position: relative;
       overflow: hidden;
     }
 
     .chat-header {
-      background-color: #075e54;
+      background: #075e54;
       color: white;
       padding: 15px;
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: white;
+      color: #075e54;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
     }
 
     .username {
+      font-size: 17px;
       font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 5px;
     }
 
-    .settings-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
+    .status {
+      font-size: 12px;
+      color: #d4f5e7;
+      margin-top: 4px;
     }
 
-    .delete-all-btn {
-      position: absolute;
-      top: 12px;
-      right: 10px;
-      background-color: black;
+    .delete-btn {
+      background: #222;
       color: white;
       border: none;
       padding: 9px 12px;
-      border-radius: 17px;
+      border-radius: 20px;
       cursor: pointer;
-      font-size: 13px;
     }
 
-    .delete-all-btn:hover {
-      background-color: #d32f2f;
+    .delete-btn:hover {
+      background: #d32f2f;
     }
 
     .chat-box {
       flex: 1;
-      padding: 10px;
+      padding: 15px;
       overflow-y: auto;
-      background-color: #e5e5e5;
+      background: #e5ddd5;
     }
 
     .message {
-      max-width: 75%;
-      margin-bottom: 10px;
-      padding: 10px;
+      max-width: 80%;
+      width: fit-content;
+      min-width: 90px;
+      padding: 10px 12px 20px;
+      margin-bottom: 12px;
       border-radius: 10px;
       position: relative;
-      display: flex;
-      align-items: center;
-      min-width: 80px;
       overflow-wrap: anywhere;
     }
 
-    .message.sent {
-      background-color: #dcf8c6;
+    .sent {
+      background: #dcf8c6;
       margin-left: auto;
-      flex-direction: row-reverse;
+      border-top-right-radius: 0;
     }
 
-    .message.received {
-      background-color: white;
+    .received {
+      background: white;
       margin-right: auto;
+      border-top-left-radius: 0;
+    }
+
+    .sender-name {
+      font-size: 11px;
+      font-weight: bold;
+      color: #075e54;
+      margin-bottom: 5px;
     }
 
     .message-text {
-      padding-bottom: 18px;
       font-size: 15px;
-      margin: 0 5px;
       white-space: pre-wrap;
     }
 
     .message-time {
-      font-size: 9px;
-      color: #888;
       position: absolute;
+      right: 8px;
       bottom: 5px;
-      right: 10px;
+      font-size: 10px;
+      color: #777;
     }
 
     .chat-footer {
       display: flex;
-      padding: 10px;
-      background-color: white;
-      border-top: 1px solid #ddd;
+      padding: 12px;
+      background: white;
+      gap: 8px;
     }
 
     .chat-footer input {
       flex: 1;
       min-width: 0;
-      padding: 12px;
       border: 1px solid #ddd;
-      border-radius: 20px;
-      margin-right: 10px;
+      border-radius: 25px;
+      padding: 12px 15px;
       outline: none;
+      font-size: 15px;
     }
 
-    .chat-footer button {
-      background-color: #075e54;
+    .send-btn {
+      background: #075e54;
       color: white;
       border: none;
-      padding: 10px 16px;
-      border-radius: 20px;
+      border-radius: 25px;
+      padding: 0 20px;
       cursor: pointer;
+      font-weight: bold;
     }
 
-    .chat-footer button:disabled {
-      background-color: #ccc;
+    .send-btn:disabled {
+      background: #aaa;
       cursor: not-allowed;
     }
 
-    .empty-message {
+    .empty {
       text-align: center;
-      color: #777;
-      margin-top: 20px;
+      color: #666;
+      margin-top: 25px;
       font-size: 14px;
+    }
+
+    @media(max-width: 480px) {
+      .chat-container {
+        height: 95vh;
+      }
     }
   </style>
 </head>
@@ -167,29 +190,44 @@
   <div class="chat-container">
 
     <div class="chat-header">
-      <span class="username">UMA</span>
-      <button class="settings-btn">😊</button>
+
+      <div class="user-info">
+        <div class="avatar">U</div>
+
+        <div>
+          <div class="username">UMA</div>
+          <div class="status" id="status">Connecting...</div>
+        </div>
+      </div>
+
+      <button class="delete-btn" id="deleteBtn">
+        Delete Chat
+      </button>
+
     </div>
 
-    <button class="delete-all-btn" id="delete-all-btn">
-      Delete Chat
-    </button>
-
-    <div class="chat-box" id="chat-box">
-      <p class="empty-message">Loading messages...</p>
+    <div class="chat-box" id="chatBox">
+      <p class="empty">Loading messages...</p>
     </div>
 
     <div class="chat-footer">
+
       <input
         type="text"
-        id="message-input"
+        id="messageInput"
         placeholder="Type a message..."
+        maxlength="2000"
         autocomplete="off"
-      />
-      <button id="send-btn">Send</button>
+      >
+
+      <button class="send-btn" id="sendBtn">
+        Send
+      </button>
+
     </div>
 
   </div>
+
 
   <script type="module">
 
@@ -208,47 +246,66 @@
       "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
 
-    // NEW FIREBASE DATABASE CREDENTIALS
+    // YOUR NEW FIREBASE CREDENTIALS
     const firebaseConfig = {
+
       apiKey: "AIzaSyARnhGuI1AYPFsbDjJBhpReYhzJokxQAe8",
+
       authDomain: "chat-343af.firebaseapp.com",
+
       databaseURL: "https://chat-343af-default-rtdb.firebaseio.com",
+
       projectId: "chat-343af",
+
       storageBucket: "chat-343af.firebasestorage.app",
+
       messagingSenderId: "272884820056",
-      appId: "1:1061792672389:web:35d52529119737e94e422d",
+
+      appId: "1:272884820056:web:35d52529119737e94e422d",
+
       measurementId: "G-XT7XPN2XL3"
+
     };
 
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
+
     const database = getDatabase(app);
 
 
     // Database reference
-    const messagesRef = ref(database, "messages/");
+    const messagesRef = ref(database, "messages");
 
 
     // HTML elements
-    const chatBox = document.getElementById("chat-box");
-    const messageInput = document.getElementById("message-input");
-    const sendBtn = document.getElementById("send-btn");
-    const deleteAllBtn = document.getElementById("delete-all-btn");
+    const chatBox = document.getElementById("chatBox");
+
+    const messageInput = document.getElementById("messageInput");
+
+    const sendBtn = document.getElementById("sendBtn");
+
+    const deleteBtn = document.getElementById("deleteBtn");
+
+    const status = document.getElementById("status");
 
 
-    // Sender name
-    const currentUser = "John Doe";
+    // Current username
+    // Change this name for each user's device.
+    const currentUser =
+      localStorage.getItem("chatUsername") ||
+      prompt("Enter your name:") ||
+      "Guest";
+
+    localStorage.setItem("chatUsername", currentUser);
 
 
     // SEND MESSAGE
     async function sendMessage() {
 
-      const messageText = messageInput.value.trim();
+      const text = messageInput.value.trim();
 
-      if (!messageText) {
-        return;
-      }
+      if (text === "") return;
 
       sendBtn.disabled = true;
 
@@ -257,138 +314,181 @@
         const newMessageRef = push(messagesRef);
 
         await set(newMessageRef, {
+
           sender: currentUser,
-          text: messageText,
-          timestamp: new Date().toISOString()
+
+          text: text,
+
+          timestamp: Date.now()
+
         });
 
         messageInput.value = "";
+
         messageInput.focus();
 
       } catch (error) {
 
-        console.error("Error sending message:", error);
-        alert("Message could not be sent. Please try again.");
+        console.error("Send error:", error);
+
+        alert("Message sending failed. Check Firebase rules.");
 
       } finally {
 
         sendBtn.disabled = false;
 
       }
+
     }
 
 
-    // SEND BUTTON CLICK
+    // SEND BUTTON
     sendBtn.addEventListener("click", sendMessage);
 
 
-    // SEND MESSAGE USING ENTER KEY
-    messageInput.addEventListener("keydown", (event) => {
+    // ENTER KEY
+    messageInput.addEventListener("keydown", function(event) {
 
       if (event.key === "Enter") {
+
         event.preventDefault();
+
         sendMessage();
+
       }
 
     });
 
 
-    // RECEIVE MESSAGES IN REAL TIME
+    // RECEIVE REAL-TIME MESSAGES
     onValue(messagesRef, (snapshot) => {
 
       chatBox.innerHTML = "";
 
+      status.textContent = "Online";
+
       if (!snapshot.exists()) {
 
         chatBox.innerHTML =
-          '<p class="empty-message">No messages yet. Start chatting!</p>';
+          '<p class="empty">No messages yet. Start chatting!</p>';
 
         return;
+
       }
 
       const messages = snapshot.val();
 
-      // Sort messages by timestamp
-      const sortedMessages = Object.entries(messages).sort(
-        (a, b) =>
-          new Date(a[1].timestamp).getTime() -
-          new Date(b[1].timestamp).getTime()
-      );
+      const messageList = Object.entries(messages);
 
-      sortedMessages.forEach(([key, message]) => {
+      // Sort messages by time
+      messageList.sort((a, b) => {
+
+        return (a[1].timestamp || 0) -
+               (b[1].timestamp || 0);
+
+      });
+
+
+      messageList.forEach(([id, message]) => {
 
         const messageElement = document.createElement("div");
 
+        messageElement.classList.add("message");
+
+        const isSent = message.sender === currentUser;
+
         messageElement.classList.add(
-          "message",
-          message.sender === currentUser ? "sent" : "received"
+          isSent ? "sent" : "received"
         );
 
-        // Message text
-        const messageContent = document.createElement("span");
 
-        messageContent.classList.add("message-text");
-        messageContent.textContent = message.text || "";
+        // Show sender name
+        if (!isSent) {
+
+          const senderName = document.createElement("div");
+
+          senderName.className = "sender-name";
+
+          senderName.textContent = message.sender || "Unknown";
+
+          messageElement.appendChild(senderName);
+
+        }
+
+
+        // Message text
+        const messageText = document.createElement("div");
+
+        messageText.className = "message-text";
+
+        messageText.textContent = message.text || "";
+
+        messageElement.appendChild(messageText);
+
 
         // Message time
-        const messageTime = document.createElement("span");
+        const time = document.createElement("span");
 
-        messageTime.classList.add("message-time");
+        time.className = "message-time";
 
         const date = new Date(message.timestamp);
 
-        messageTime.textContent = isNaN(date.getTime())
+        time.textContent = isNaN(date.getTime())
           ? ""
           : date.toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit"
             });
 
-        messageElement.appendChild(messageContent);
-        messageElement.appendChild(messageTime);
+        messageElement.appendChild(time);
+
 
         chatBox.appendChild(messageElement);
 
       });
 
-      // Scroll to latest message
+
+      // Scroll to bottom
       chatBox.scrollTop = chatBox.scrollHeight;
 
     }, (error) => {
 
-      console.error("Firebase read error:", error);
-      chatBox.textContent = "Unable to load messages. Check database permissions.";
+      console.error("Firebase error:", error);
+
+      status.textContent = "Connection error";
+
+      chatBox.textContent =
+        "Unable to load messages. Check Firebase database permissions.";
 
     });
 
 
-    // DELETE ALL MESSAGES
-    deleteAllBtn.addEventListener("click", async () => {
+    // DELETE ALL CHAT MESSAGES
+    deleteBtn.addEventListener("click", async function() {
 
-      const confirmation = confirm(
-        "Are you sure you want to delete all messages?"
+      const confirmDelete = confirm(
+        "Are you sure you want to delete ALL chat messages?"
       );
 
-      if (!confirmation) {
-        return;
-      }
+      if (!confirmDelete) return;
 
-      deleteAllBtn.disabled = true;
+      deleteBtn.disabled = true;
 
       try {
 
         await remove(messagesRef);
 
-        alert("All messages have been deleted.");
+        alert("All messages deleted successfully.");
 
       } catch (error) {
 
-        console.error("Error deleting messages:", error);
-        alert("Unable to delete messages. Please check permissions.");
+        console.error("Delete error:", error);
+
+        alert("Unable to delete messages. Check database permissions.");
 
       } finally {
 
-        deleteAllBtn.disabled = false;
+        deleteBtn.disabled = false;
 
       }
 
