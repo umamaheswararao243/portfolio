@@ -1,253 +1,400 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hyderabad</title>
+  <title>UMA Chat Application</title>
+
   <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
 
-  .chat-container {
-    width: 400px;
-    height: 600px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
+    .chat-container {
+      width: 400px;
+      max-width: 100%;
+      height: 600px;
+      max-height: 95vh;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .chat-header {
-    background-color: #075e54;
-    color: white;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    .chat-header {
+      background-color: #075e54;
+      color: white;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
-  .chat-header .username {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
+    .username {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
 
-  .chat-header .settings-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-  }
+    .settings-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
 
-  .delete-all-btn {
-    position: absolute;
-    top: 14px;
-    right: 10px;
-    background-color: #000000;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 17px;
-    cursor: pointer;
-    font-size: 14px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    .delete-all-btn {
+      position: absolute;
+      top: 12px;
+      right: 10px;
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 9px 12px;
+      border-radius: 17px;
+      cursor: pointer;
+      font-size: 13px;
+    }
 
-  .delete-all-btn:hover {
-    background-color: #d32f2f;
-  }
+    .delete-all-btn:hover {
+      background-color: #d32f2f;
+    }
 
-  .chat-box {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    background-color: #e5e5e5;
-  }
+    .chat-box {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #e5e5e5;
+    }
 
-  .message {
-    max-width: 70%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 10px;
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
+    .message {
+      max-width: 75%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-width: 80px;
+      overflow-wrap: anywhere;
+    }
 
-  .message.sent {
-    background-color: #dcf8c6;
-    margin-left: auto;
-    flex-direction: row-reverse;
-  }
+    .message.sent {
+      background-color: #dcf8c6;
+      margin-left: auto;
+      flex-direction: row-reverse;
+    }
 
-  .message.received {
-    background-color: #ffffff;
-    margin-right: auto;
-    flex-direction: row;
-  }
+    .message.received {
+      background-color: white;
+      margin-right: auto;
+    }
 
-  .message.received:nth-child(even) {
-    background-color: #f8e5e5;
-  }
+    .message-text {
+      padding-bottom: 18px;
+      font-size: 15px;
+      margin: 0 5px;
+      white-space: pre-wrap;
+    }
 
-  .message .message-text {
-    padding-bottom: 18px;
-    font-size: 16px;
-    margin: 0 10px;
-  }
+    .message-time {
+      font-size: 9px;
+      color: #888;
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+    }
 
-  .message .message-time {
-    font-size: 9px;
-    color: #888;
-    position: absolute;
-    bottom: 5px;
-    right: 10px;
-  }
+    .chat-footer {
+      display: flex;
+      padding: 10px;
+      background-color: white;
+      border-top: 1px solid #ddd;
+    }
 
-  .chat-footer {
-    display: flex;
-    padding: 10px;
-    background-color: #ffffff;
-    border-top: 1px solid #ddd;
-  }
+    .chat-footer input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      margin-right: 10px;
+      outline: none;
+    }
 
-  .chat-footer input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    margin-right: 10px;
-  }
+    .chat-footer button {
+      background-color: #075e54;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
 
-  .chat-footer button {
-    background-color: #075e54;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
+    .chat-footer button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
 
-  .chat-footer button:disabled {
-    background-color: #ccc;
-  }
-</style>
-
+    .empty-message {
+      text-align: center;
+      color: #777;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+  </style>
 </head>
+
 <body>
+
   <div class="chat-container">
+
     <div class="chat-header">
       <span class="username">UMA</span>
       <button class="settings-btn">😊</button>
     </div>
-    <button class="delete-all-btn" id="delete-all-btn">Delete Chat</button> <!-- Delete All Button -->
-    <div class="chat-box" id="chat-box"></div>
+
+    <button class="delete-all-btn" id="delete-all-btn">
+      Delete Chat
+    </button>
+
+    <div class="chat-box" id="chat-box">
+      <p class="empty-message">Loading messages...</p>
+    </div>
+
     <div class="chat-footer">
-      <input type="text" id="message-input" placeholder="Type a message..." />
+      <input
+        type="text"
+        id="message-input"
+        placeholder="Type a message..."
+        autocomplete="off"
+      />
       <button id="send-btn">Send</button>
     </div>
+
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
+    // Firebase imports
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+
+    import {
+      getDatabase,
+      ref,
+      push,
+      set,
+      onValue,
+      remove
+    } from
+      "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+
+    // NEW FIREBASE DATABASE CREDENTIALS
     const firebaseConfig = {
-      apiKey: "AIzaSyCvPbNTIRpDm-7qKX4PMeYu-nbM_Qls_qo",
-      authDomain: "chatapplication-fd71c.firebaseapp.com",
-      databaseURL: "https://chatapplication-fd71c-default-rtdb.firebaseio.com/",
-      projectId: "chatapplication-fd71c",
-      storageBucket: "chatapplication-fd71c.appspot.com",
-      messagingSenderId: "1061792672389",
-      appId: "1:1061792672389:web:9db6be30932435575957ec",
-      measurementId: "G-N3J453V4RL"
+      apiKey: "AIzaSyARnhGuI1AYPFsbDjJBhpReYhzJokxQAe8",
+      authDomain: "chat-343af.firebaseapp.com",
+      databaseURL: "https://chat-343af-default-rtdb.firebaseio.com",
+      projectId: "chat-343af",
+      storageBucket: "chat-343af.firebasestorage.app",
+      messagingSenderId: "272884820056",
+      appId: "1:1061792672389:web:35d52529119737e94e422d",
+      measurementId: "G-XT7XPN2XL3"
     };
 
+
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
-    const chatBox = document.getElementById('chat-box');
-    const messageInput = document.getElementById('message-input');
-    const sendBtn = document.getElementById('send-btn');
-    const deleteAllBtn = document.getElementById('delete-all-btn');
 
-    const messagesRef = ref(database, 'messages/');
+    // Database reference
+    const messagesRef = ref(database, "messages/");
 
-    sendBtn.addEventListener('click', async () => {
+
+    // HTML elements
+    const chatBox = document.getElementById("chat-box");
+    const messageInput = document.getElementById("message-input");
+    const sendBtn = document.getElementById("send-btn");
+    const deleteAllBtn = document.getElementById("delete-all-btn");
+
+
+    // Sender name
+    const currentUser = "John Doe";
+
+
+    // SEND MESSAGE
+    async function sendMessage() {
+
       const messageText = messageInput.value.trim();
-      if (messageText) {
+
+      if (!messageText) {
+        return;
+      }
+
+      sendBtn.disabled = true;
+
+      try {
+
         const newMessageRef = push(messagesRef);
+
         await set(newMessageRef, {
-          sender: 'John Doe',
+          sender: currentUser,
           text: messageText,
           timestamp: new Date().toISOString()
         });
 
-        messageInput.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
+        messageInput.value = "";
+        messageInput.focus();
+
+      } catch (error) {
+
+        console.error("Error sending message:", error);
+        alert("Message could not be sent. Please try again.");
+
+      } finally {
+
+        sendBtn.disabled = false;
+
       }
+    }
+
+
+    // SEND BUTTON CLICK
+    sendBtn.addEventListener("click", sendMessage);
+
+
+    // SEND MESSAGE USING ENTER KEY
+    messageInput.addEventListener("keydown", (event) => {
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+
     });
 
-    messageInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        sendBtn.click();
-      }
-    });
 
+    // RECEIVE MESSAGES IN REAL TIME
     onValue(messagesRef, (snapshot) => {
-      chatBox.innerHTML = '';
+
+      chatBox.innerHTML = "";
+
+      if (!snapshot.exists()) {
+
+        chatBox.innerHTML =
+          '<p class="empty-message">No messages yet. Start chatting!</p>';
+
+        return;
+      }
+
       const messages = snapshot.val();
-      let receivedMessageCount = 0;
-      for (const key in messages) {
-        const message = messages[key];
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message', message.sender === 'John Doe' ? 'sent' : 'received');
 
-        const messageContent = document.createElement('span');
-        messageContent.classList.add('message-text');
-        messageContent.textContent = message.text;
+      // Sort messages by timestamp
+      const sortedMessages = Object.entries(messages).sort(
+        (a, b) =>
+          new Date(a[1].timestamp).getTime() -
+          new Date(b[1].timestamp).getTime()
+      );
 
-        const messageTime = document.createElement('span');
-        messageTime.classList.add('message-time');
-        messageTime.textContent = new Date(message.timestamp).toLocaleTimeString();
+      sortedMessages.forEach(([key, message]) => {
+
+        const messageElement = document.createElement("div");
+
+        messageElement.classList.add(
+          "message",
+          message.sender === currentUser ? "sent" : "received"
+        );
+
+        // Message text
+        const messageContent = document.createElement("span");
+
+        messageContent.classList.add("message-text");
+        messageContent.textContent = message.text || "";
+
+        // Message time
+        const messageTime = document.createElement("span");
+
+        messageTime.classList.add("message-time");
+
+        const date = new Date(message.timestamp);
+
+        messageTime.textContent = isNaN(date.getTime())
+          ? ""
+          : date.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit"
+            });
 
         messageElement.appendChild(messageContent);
         messageElement.appendChild(messageTime);
+
         chatBox.appendChild(messageElement);
 
-        if (message.sender !== 'John Doe') {
-          receivedMessageCount++;
-        }
-      }
+      });
+
+      // Scroll to latest message
       chatBox.scrollTop = chatBox.scrollHeight;
+
+    }, (error) => {
+
+      console.error("Firebase read error:", error);
+      chatBox.textContent = "Unable to load messages. Check database permissions.";
+
     });
 
-    deleteAllBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to delete all messages?')) {
-        remove(messagesRef)
-          .then(() => {
-            alert('All messages have been deleted.');
-          })
-          .catch((error) => {
-            console.error('Error deleting messages:', error);
-          });
+
+    // DELETE ALL MESSAGES
+    deleteAllBtn.addEventListener("click", async () => {
+
+      const confirmation = confirm(
+        "Are you sure you want to delete all messages?"
+      );
+
+      if (!confirmation) {
+        return;
       }
+
+      deleteAllBtn.disabled = true;
+
+      try {
+
+        await remove(messagesRef);
+
+        alert("All messages have been deleted.");
+
+      } catch (error) {
+
+        console.error("Error deleting messages:", error);
+        alert("Unable to delete messages. Please check permissions.");
+
+      } finally {
+
+        deleteAllBtn.disabled = false;
+
+      }
+
     });
+
   </script>
+
 </body>
 </html>
