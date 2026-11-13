@@ -2,324 +2,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UMA Chat Application</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>personal</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg,#dceee9,#e8edf5);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.chat-container {
+    width: 450px;
+    max-width: 100%;
+    height: 700px;
+    max-height: 95vh;
+    background: white;
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 45px rgba(0,0,0,.15);
+}
+
+/* HEADER */
+
+.chat-header {
+    background: linear-gradient(135deg,#075e54,#128c7e,#25a18e);
+    padding: 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    background: white;
+    color: #087b69;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px #0002;
+}
+
+.username {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.status {
+    font-size: 12px;
+    margin-top: 4px;
+    color: #d6fff0;
+}
+
+.delete-btn {
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.3);
+    color: white;
+    padding: 10px 13px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.delete-btn:hover {
+    background: #d93025;
+}
+
+/* CHAT AREA */
+
+.chat-box {
+    flex: 1;
+    padding: 18px;
+    overflow-y: auto;
+    background-color: #edf4f1;
+    background-image: radial-gradient(#c7d9d1 0.6px, transparent 0.6px);
+    background-size: 15px 15px;
+}
+
+.message {
+    max-width: 82%;
+    min-width: 90px;
+    width: fit-content;
+    padding: 11px 13px 23px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    position: relative;
+    overflow-wrap: anywhere;
+    box-shadow: 0 2px 5px rgba(0,0,0,.07);
+    animation: appear .25s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
+.sent {
+    background: #d7f8df;
+    margin-left: auto;
+    border-bottom-right-radius: 3px;
+}
+
+.received {
+    background: white;
+    margin-right: auto;
+    border-bottom-left-radius: 3px;
+}
+
+.sender-name {
+    color: #087b69;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.message-text {
+    font-size: 15px;
+    color: #252525;
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.message-time {
+    position: absolute;
+    right: 9px;
+    bottom: 6px;
+    font-size: 10px;
+    color: #77827d;
+}
+
+/* FOOTER */
+
+.chat-footer {
+    padding: 13px;
+    display: flex;
+    gap: 10px;
+    background: white;
+    border-top: 1px solid #eee;
+    align-items: center;
+}
+
+.chat-footer input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: #f1f5f3;
+    padding: 14px 18px;
+    border-radius: 30px;
+    font-size: 15px;
+}
+
+.send-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#087b69,#075e54);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.send-btn:hover {
+    transform: scale(1.08);
+    background: #034d43;
+}
+
+.send-btn:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+    margin-top: 40px;
+    font-size: 14px;
+}
+
+button {
+    font-family: inherit;
+}
+
+.chat-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: #a7c8ba;
+    border-radius: 10px;
+}
+
+/* MOBILE */
+
+@media(max-width:480px) {
     body {
-      font-family: Arial, sans-serif;
-      background: #e9edef;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 10px;
+        padding: 0;
     }
 
     .chat-container {
-      width: 420px;
-      max-width: 100%;
-      height: 650px;
-      max-height: 95vh;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+        width: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
     }
-
-    .chat-header {
-      background: #075e54;
-      color: white;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: white;
-      color: #075e54;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .username {
-      font-size: 17px;
-      font-weight: bold;
-    }
-
-    .status {
-      font-size: 12px;
-      color: #d4f5e7;
-      margin-top: 4px;
-    }
-
-    .delete-btn {
-      background: #222;
-      color: white;
-      border: none;
-      padding: 9px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-
-    .delete-btn:hover {
-      background: #d32f2f;
-    }
-
-    .chat-box {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-      background: #e5ddd5;
-    }
-
-    .message {
-      max-width: 80%;
-      width: fit-content;
-      min-width: 90px;
-      padding: 10px 12px 20px;
-      margin-bottom: 12px;
-      border-radius: 10px;
-      position: relative;
-      overflow-wrap: anywhere;
-    }
-
-    .sent {
-      background: #dcf8c6;
-      margin-left: auto;
-      border-top-right-radius: 0;
-    }
-
-    .received {
-      background: white;
-      margin-right: auto;
-      border-top-left-radius: 0;
-    }
-
-    .sender-name {
-      font-size: 11px;
-      font-weight: bold;
-      color: #075e54;
-      margin-bottom: 5px;
-    }
-
-    .message-text {
-      font-size: 15px;
-      white-space: pre-wrap;
-    }
-
-    .message-time {
-      position: absolute;
-      right: 8px;
-      bottom: 5px;
-      font-size: 10px;
-      color: #777;
-    }
-
-    .chat-footer {
-      display: flex;
-      padding: 12px;
-      background: white;
-      gap: 8px;
-    }
-
-    .chat-footer input {
-      flex: 1;
-      min-width: 0;
-      border: 1px solid #ddd;
-      border-radius: 25px;
-      padding: 12px 15px;
-      outline: none;
-      font-size: 15px;
-    }
-
-    .send-btn {
-      background: #075e54;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 0 20px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .send-btn:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-
-    .empty {
-      text-align: center;
-      color: #666;
-      margin-top: 25px;
-      font-size: 14px;
-    }
-
-    @media(max-width: 480px) {
-      .chat-container {
-        height: 95vh;
-      }
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <div class="chat-container">
+<div class="chat-container">
 
     <div class="chat-header">
 
-      <div class="user-info">
-        <div class="avatar">U</div>
+        <div class="user-info">
 
-        <div>
-          <div class="username">Uma</div>
-          <div class="status" id="status">Connecting...</div>
+            <div class="avatar">U</div>
+
+            <div>
+                <div class="username">UMA</div>
+
+                <div class="status" id="status">
+                    Connecting...
+                </div>
+            </div>
+
         </div>
-      </div>
 
-      <button class="delete-btn" id="deleteBtn">
-        Delete Chat
-      </button>
+        <button class="delete-btn" id="deleteBtn">
+            🗑 Delete
+        </button>
 
     </div>
 
     <div class="chat-box" id="chatBox">
-      <p class="empty">Loading messages...</p>
+        <p class="empty">Loading messages...</p>
     </div>
 
     <div class="chat-footer">
 
-      <input
-        type="text"
-        id="messageInput"
-        placeholder="Type a message..."
-        maxlength="2000"
-        autocomplete="off"
-      >
+        <input
+            type="text"
+            id="messageInput"
+            placeholder="Type a message..."
+            maxlength="2000"
+            autocomplete="off"
+        >
 
-      <button class="send-btn" id="sendBtn">
-        Send
-      </button>
+        <button class="send-btn" id="sendBtn">
+            ➤
+        </button>
 
     </div>
 
-  </div>
+</div>
 
 
-  <script type="module">
+<script type="module">
 
-    // Firebase imports
-    import { initializeApp } from
-      "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+// FIREBASE IMPORTS
 
-    import {
-      getDatabase,
-      ref,
-      push,
-      set,
-      onValue,
-      remove
-    } from
-      "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
 
-
-    // YOUR NEW FIREBASE CREDENTIALS
-    const firebaseConfig = {
-
-      apiKey: "AIzaSyARnhGuI1AYPFsbDjJBhpReYhzJokxQAe8",
-
-      authDomain: "chat-343af.firebaseapp.com",
-
-      databaseURL: "https://chat-343af-default-rtdb.firebaseio.com",
-
-      projectId: "chat-343af",
-
-      storageBucket: "chat-343af.firebasestorage.app",
-
-      messagingSenderId: "272884820056",
-
-      appId: "1:272884820056:web:35d52529119737e94e422d",
-
-      measurementId: "G-XT7XPN2XL3"
-
-    };
+import {
+    getDatabase,
+    ref,
+    push,
+    set,
+    onValue,
+    remove
+}
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
+// FIREBASE CONFIGURATION
 
-    const database = getDatabase(app);
+const firebaseConfig = {
 
+    apiKey: "AIzaSyARnhGuI1AYPFsbDjJBhpReYhzJokxQAe8",
 
-    // Database reference
-    const messagesRef = ref(database, "messages");
+    authDomain: "chat-343af.firebaseapp.com",
 
+    databaseURL: "https://chat-343af-default-rtdb.firebaseio.com",
 
-    // HTML elements
-    const chatBox = document.getElementById("chatBox");
+    projectId: "chat-343af",
 
-    const messageInput = document.getElementById("messageInput");
+    storageBucket: "chat-343af.firebasestorage.app",
 
-    const sendBtn = document.getElementById("sendBtn");
+    messagingSenderId: "272884820056",
 
-    const deleteBtn = document.getElementById("deleteBtn");
+    appId: "1:272884820056:web:35d52529119737e94e422d",
 
-    const status = document.getElementById("status");
+    measurementId: "G-XT7XPN2XL3"
 
-
-    // Current username
-    // Change this name for each user's device.
-    const currentUser =
-      localStorage.getItem("chatUsername") ||
-      prompt("Enter your name:") ||
-      "Guest";
-
-    localStorage.setItem("chatUsername", currentUser);
+};
 
 
-    // SEND MESSAGE
-    async function sendMessage() {
+// INITIALIZE FIREBASE
 
-      const text = messageInput.value.trim();
+const app = initializeApp(firebaseConfig);
 
-      if (text === "") return;
+const database = getDatabase(app);
 
-      sendBtn.disabled = true;
+const messagesRef = ref(database, "messages");
 
-      try {
+
+// HTML ELEMENTS
+
+const chatBox = document.getElementById("chatBox");
+
+const messageInput = document.getElementById("messageInput");
+
+const sendBtn = document.getElementById("sendBtn");
+
+const deleteBtn = document.getElementById("deleteBtn");
+
+const status = document.getElementById("status");
+
+
+// USERNAME
+
+const currentUser =
+    localStorage.getItem("chatUsername") ||
+    prompt("Enter your name:") ||
+    "Guest";
+
+localStorage.setItem("chatUsername", currentUser);
+
+
+// SEND MESSAGE
+
+async function sendMessage() {
+
+    const text = messageInput.value.trim();
+
+    if (!text || sendBtn.disabled) return;
+
+    sendBtn.disabled = true;
+
+    try {
 
         const newMessageRef = push(messagesRef);
 
         await set(newMessageRef, {
 
-          sender: currentUser,
+            sender: currentUser,
 
-          text: text,
+            text: text,
 
-          timestamp: Date.now()
+            timestamp: Date.now()
 
         });
 
@@ -327,96 +392,94 @@
 
         messageInput.focus();
 
-      } catch (error) {
+    } catch(error) {
 
         console.error("Send error:", error);
 
-        alert("Message sending failed. Check Firebase rules.");
+        alert("Message sending failed: " + error.message);
 
-      } finally {
+    } finally {
 
         sendBtn.disabled = false;
 
-      }
-
     }
 
-
-    // SEND BUTTON
-    sendBtn.addEventListener("click", sendMessage);
+}
 
 
-    // ENTER KEY
-    messageInput.addEventListener("keydown", function(event) {
+// SEND BUTTON
 
-      if (event.key === "Enter") {
+sendBtn.addEventListener("click", sendMessage);
+
+
+// ENTER KEY
+
+messageInput.addEventListener("keydown", (event) => {
+
+    if(event.key === "Enter") {
 
         event.preventDefault();
 
         sendMessage();
 
-      }
+    }
 
-    });
+});
 
 
-    // RECEIVE REAL-TIME MESSAGES
-    onValue(messagesRef, (snapshot) => {
+// RECEIVE REAL-TIME MESSAGES
 
-      chatBox.innerHTML = "";
+onValue(messagesRef, (snapshot) => {
 
-      status.textContent = "Online";
+    chatBox.innerHTML = "";
 
-      if (!snapshot.exists()) {
+    status.textContent = "● Online";
+
+    if(!snapshot.exists()) {
 
         chatBox.innerHTML =
-          '<p class="empty">No messages yet. Start chatting!</p>';
+            '<p class="empty">💬 No messages yet. Start chatting!</p>';
 
         return;
 
-      }
+    }
 
-      const messages = snapshot.val();
+    const messages = Object.entries(snapshot.val());
 
-      const messageList = Object.entries(messages);
-
-      // Sort messages by time
-      messageList.sort((a, b) => {
-
-        return (a[1].timestamp || 0) -
-               (b[1].timestamp || 0);
-
-      });
+    messages.sort((a,b) =>
+        (a[1].timestamp || 0) - (b[1].timestamp || 0)
+    );
 
 
-      messageList.forEach(([id, message]) => {
+    messages.forEach(([id,message]) => {
 
         const messageElement = document.createElement("div");
-
-        messageElement.classList.add("message");
 
         const isSent = message.sender === currentUser;
 
         messageElement.classList.add(
-          isSent ? "sent" : "received"
+            "message",
+            isSent ? "sent" : "received"
         );
 
 
-        // Show sender name
-        if (!isSent) {
+        // SENDER NAME
 
-          const senderName = document.createElement("div");
+        if(!isSent) {
 
-          senderName.className = "sender-name";
+            const senderName = document.createElement("div");
 
-          senderName.textContent = message.sender || "Unknown";
+            senderName.className = "sender-name";
 
-          messageElement.appendChild(senderName);
+            senderName.textContent = message.sender || "Unknown";
+
+            messageElement.appendChild(senderName);
 
         }
 
 
-        // Message text
+        // MESSAGE TEXT
+
         const messageText = document.createElement("div");
 
         messageText.className = "message-text";
@@ -426,7 +489,8 @@
         messageElement.appendChild(messageText);
 
 
-        // Message time
+        // MESSAGE TIME
+
         const time = document.createElement("span");
 
         time.className = "message-time";
@@ -434,67 +498,68 @@
         const date = new Date(message.timestamp);
 
         time.textContent = isNaN(date.getTime())
-          ? ""
-          : date.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit"
+            ? ""
+            : date.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
             });
 
         messageElement.appendChild(time);
 
-
         chatBox.appendChild(messageElement);
-
-      });
-
-
-      // Scroll to bottom
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-    }, (error) => {
-
-      console.error("Firebase error:", error);
-
-      status.textContent = "Connection error";
-
-      chatBox.textContent =
-        "Unable to load messages. Check Firebase database permissions.";
 
     });
 
 
-    // DELETE ALL CHAT MESSAGES
-    deleteBtn.addEventListener("click", async function() {
+    // AUTO SCROLL
 
-      const confirmDelete = confirm(
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+}, (error) => {
+
+    console.error("Firebase error:", error);
+
+    status.textContent = "Connection error";
+
+    chatBox.textContent =
+        "Unable to load messages. Check Firebase permissions.";
+
+});
+
+
+// DELETE ALL MESSAGES
+
+deleteBtn.addEventListener("click", async () => {
+
+    const confirmDelete = confirm(
         "Are you sure you want to delete ALL chat messages?"
-      );
+    );
 
-      if (!confirmDelete) return;
+    if(!confirmDelete) return;
 
-      deleteBtn.disabled = true;
+    deleteBtn.disabled = true;
 
-      try {
+    try {
 
         await remove(messagesRef);
 
-        alert("All messages deleted successfully.");
+        alert("All messages deleted successfully!");
 
-      } catch (error) {
+    } catch(error) {
 
         console.error("Delete error:", error);
 
-        alert("Unable to delete messages. Check database permissions.");
+        alert("Delete failed: " + error.message);
 
-      } finally {
+    } finally {
 
         deleteBtn.disabled = false;
 
-      }
+    }
 
-    });
+});
 
-  </script>
+</script>
 
 </body>
 </html>
